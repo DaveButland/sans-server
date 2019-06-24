@@ -3,9 +3,9 @@ const uuid     = require('uuid');
 const persist  = require('./persist');
 const validateJWT = require('./validateJWT');
 const response = require('./response');
+const config = require('./config') ;
 
-const keys = { accessKeyId: "AKIA2YK4SJRTOZRYQZV4" , secretAccessKey: "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" } ;
-const s3 = new AWS.S3({signatureVersion: 'v4', signatureCache: false, accessKeyId: keys.accessKeyId, secretAccessKey: keys.secretAccessKey});
+const s3 = new AWS.S3({signatureVersion: 'v4', signatureCache: false, accessKeyId: config.keys.accessKeyId, secretAccessKey: config.keys.secretAccessKey});
 
 //create a new image. Header must contain a JWT token to identify user and body must contain image information
 //function returns the signedURL to load the image

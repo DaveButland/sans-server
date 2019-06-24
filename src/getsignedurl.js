@@ -1,13 +1,12 @@
 const AWS = require('aws-sdk');
+const config = require('./config') ;
  
 exports.handler = (event, context, callback) => {
     AWS.config.update({
         region: "eu-west-2"
     });
 
-    const keys = { accessKeyId: "AKIA2YK4SJRTOZRYQZV4" , secretAccessKey: "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" } ;
-    
-		const s3 = new AWS.S3({signatureVersion: 'v4', signatureCache: false, accessKeyId: keys.accessKeyId, secretAccessKey: keys.secretAccessKey});
+		const s3 = new AWS.S3({signatureVersion: 'v4', signatureCache: false, accessKeyId: config.keys.accessKeyId, secretAccessKey: config.keys.secretAccessKey});
 		
     var request = event["queryStringParameters"]["request"];
     var key = event["queryStringParameters"]["key"];
