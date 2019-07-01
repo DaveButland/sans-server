@@ -18,7 +18,7 @@ exports.create = (event, context, callback) => {
 	}
 	
 	const body = JSON.parse( event.body ) ;
-	const table = 'folders' ;
+	const table = 'sans-folders' ;
 	var folder = {} ;
 	folder.userId = sub ;
 	folder.folderId  = uuid.v4() ;
@@ -47,7 +47,7 @@ exports.get = (event, context, callback) => {
 		return false ;
 	}
 	
-	const table = 'folders' ;
+	const table = 'sans-folders' ;
 	var folder = {} ;
 	folder.sub = sub ;
 
@@ -65,6 +65,7 @@ exports.get = (event, context, callback) => {
 	*/
 }
 
+
 //delete an existing folder. Header must contain a JWT token to identify user and body contains the folder object
 exports.delete = (event, context, callback) => {
 	
@@ -79,7 +80,7 @@ exports.delete = (event, context, callback) => {
 		return false ;
 	}
 	
-	const table = 'folders' ;
+	const table = 'sans-folders' ;
 	const key = { userId: sub, folderId: event.pathParameters.folderid } ;
 
 	persist.delete( table, key ).then( function( data ) {
@@ -106,7 +107,7 @@ exports.rename = ( event, context, callback) => {
 	}
 	
 	const body = JSON.parse( event.body ) ;
-	const table = 'folders' ;
+	const table = 'sans-folders' ;
 	var folder = {} ;
 	folder.userId     = body.userId ;
 	folder.folderId   = body.folderId;
@@ -129,7 +130,7 @@ exports.getAll = (event, context, callback) => {
 	}
 
 	const sub = validateJWT.getSub( event.headers.Authorization.slice(7) ) ;
-	const table = 'folders' ;
+	const table = 'sans-folders' ;
 	const expression = "userId = :u" ;
 	const values = {":u": sub } ;
 

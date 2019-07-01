@@ -2,10 +2,10 @@ var jsonwebtoken = require('jsonwebtoken');
 var jwkToPem = require('jwk-to-pem');
 const config = require('./config') ;
 
-var USERPOOLID = 'eu-west-2_Jnf5VZPOH';
+var USERPOOLID = config.USERPOOLID ;
 var JWKS = config.JWKS ;
+var region = config.region ;
 
-var region = 'eu-west-2';
 var iss = 'https://cognito-idp.' + region + '.amazonaws.com/' + USERPOOLID;
 var pems;
 

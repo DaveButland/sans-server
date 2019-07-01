@@ -37,6 +37,33 @@ exports.read = function (table, expression, values ) {
 	*/
 }
 
+exports.readIndex = function (table, index, expression, values ) {
+	const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+	const params = { 
+		TableName: table,
+		IndexName: index,
+		KeyConditionExpression: expression,
+		ExpressionAttributeValues: values
+	} ;
+
+//	return dynamoDb.query( params ).promise() ;
+
+	return dynamoDb.query( params ).promise() ;
+ /*
+	dynamoDb.query(params, function(err, data) {
+    if (err) {
+        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+        console.log("Query succeeded.");
+        data.Items.forEach(function(item) {
+            console.log( JSON.stringify( item ) ) ;
+        });
+    }
+	});
+	*/
+}
+
 exports.update = function (table, record) {
 	const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
