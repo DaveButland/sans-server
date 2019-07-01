@@ -78,10 +78,12 @@ exports.delete = (event, context, callback) => {
 	}
 	
 	const folderId = event.pathParameters.folderid ;
-	const imageId  = event.pathParameters.imageid ;
+	const imageId  = event.pathParameters.imagesid ;
 	const table = 'sans-images' ;
 
-	const key = { userId: sub, folderId: imageId } ;
+	const key = { userId: sub, imageId: imageId } ;
+	
+	console.log( key.userId, key.imageId ) ;
 
 	persist.delete( table, key ).then( function( data ) {
 		console.log( response.success( data ) ) ;
@@ -102,6 +104,7 @@ exports.delete = (event, context, callback) => {
 		});
 	}) ;
 }
+
 
 //get all the images in a folder. Header must contain a JWT token to identify user
 exports.getAll = (event, context, callback) => {
