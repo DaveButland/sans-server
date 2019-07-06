@@ -4,7 +4,7 @@ const persist  = require('./persist');
 const validateJWT = require('./validateJWT');
 const response = require('./response');
 const config = require('./config') ;
-//const resize = require('./resize') ;
+const resize = require('./resize') ;
 
 AWS.config.update({
 	region: config.region
