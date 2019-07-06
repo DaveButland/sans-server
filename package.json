@@ -1,5 +1,5 @@
 {
-  "name": "aws-blog-terraform",
+  "name": "sans-server",
   "version": "1.0.0",
   "description": "",
   "main": "createArticle.js",
@@ -11,6 +11,7 @@
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.1",
+    "shaper": "0.0.5",
     "uuid": "^3.3.2"
   }
 }
