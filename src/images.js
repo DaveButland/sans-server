@@ -4,7 +4,6 @@ const persist  = require('./persist');
 const validateJWT = require('./validateJWT');
 const response = require('./response');
 const config = require('./config') ;
-const resize = require('./resize') ;
 
 AWS.config.update({
 	region: config.region
@@ -52,7 +51,7 @@ exports.create = (event, context, callback) => {
 				context.done(error);
 			}else{
 				console.log( data ) ;
-				callback( null, response.success( { signedURL: data } ) ) ;
+				callback( null, response.success( { image: image, signedURL: data } ) ) ;
 			}
 		})
 	}).catch ( function (error ) {
@@ -61,8 +60,7 @@ exports.create = (event, context, callback) => {
 	}) ;
 }
 
-//create a new image. Header must contain a JWT token to identify user and body must contain image information
-//function returns the signedURL to load the image
+//Not used!!
 exports.update = (event, context, callback) => {
 
 	if ( ( !event.headers.Authorization ) || ( !event.headers.Authorization.startsWith("Bearer ") ) ) {
@@ -91,7 +89,7 @@ exports.update = (event, context, callback) => {
 	if ( !image.thumbnail )
 	{
 		image.thumbnail = image.imageId+'-300' ;
-		resize.createThumbnail( image, { width: 300 } ) ;
+//		resize.createThumbnail( image, { width: 300 } ) ;
 	}
 	
 	persist.update( table, image ).then( function( data ) {
@@ -118,7 +116,7 @@ exports.delete = (event, context, callback) => {
 	
 	//need to get folder from existing record. 
 	const folderId = event.pathParameters.folderid ;
-	const imageId  = event.pathParameters.imageid ;
+	const imageId  = event.pathParameters.imagesid ;
 	const table = 'sans-images' ;
 
 	const key = { userId: sub, imageId: imageId } ;
@@ -130,10 +128,10 @@ exports.delete = (event, context, callback) => {
 
 		var bucket  = "private.sans-website.com"
 		var orig_key     = "private/" + folderId + "/" + imageId ;
-		var thumb_key     = "private/" + folderId + "/" + imageId ;
+		var thumb_key     = "private/" + folderId + "/" + imageId + '-300' ;
 	 
 		var orig_params = {  Bucket: bucket, Key: orig_key };
-		var thum_params = {  Bucket: bucket, Key: thumb_key };
+		var thumb_params = {  Bucket: bucket, Key: thumb_key };
 	
 		s3.deleteObject(orig_params, function(err, data) {
 			if (err) { 
