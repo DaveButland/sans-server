@@ -128,7 +128,7 @@ exports.delete = (event, context, callback) => {
 
 		var bucket  = "private.sans-website.com"
 		var orig_key     = "private/" + folderId + "/" + imageId ;
-		var thumb_key     = "private/" + folderId + "/" + imageId + '-300' ;
+		var thumb_key     = "thumbnail/" + folderId + "/" + imageId + '-300' ;
 	 
 		var orig_params = {  Bucket: bucket, Key: orig_key };
 		var thumb_params = {  Bucket: bucket, Key: thumb_key };
