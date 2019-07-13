@@ -107,11 +107,12 @@ exports.update = ( event, context, callback) => {
 	
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-pages' ;
-	var folder = {} ;
+	var page = {} ;
 	page.userId    = body.userId ;
 	page.pageId    = body.pageId;
 	page.name      = body.name ;
 	page.content   = body.content ;
+	page.title     = body.title ;
 	page.createdAt = body.createdAt ;
 	
 	persist.create( table, page ).then( function( data ) {
