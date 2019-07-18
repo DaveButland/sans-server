@@ -11,6 +11,18 @@ exports.create = function (table, record) {
 	return dynamoDb.put(params).promise();
 }
 
+// slowly refactoring to get, put, update, delete, find etc
+exports.put = function (table, record) {
+	const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+	const params = { 
+		TableName: table,
+		Item: record 
+	}
+
+	return dynamoDb.put(params).promise();
+}
+
 exports.read = function (table, expression, values ) {
 	const dynamoDb = new AWS.DynamoDB.DocumentClient();
 

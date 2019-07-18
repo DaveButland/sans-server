@@ -28,20 +28,16 @@ exports.create = (event, context, callback) => {
 	
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-images' ;
-	var image = {} ;
+	const image = JSON.parse( event.body ) ;
 	image.userId    = sub ;
 	image.imageId   = uuid.v4() ;
-	image.folderId  = body.folderId ;
-	image.name      = body.name ;
-	image.type      = body.type ;
-	image.size      = body.size ;
 	image.createdAt = Date.now() ;
 	
 	var request = "putObject" ;
 	var bucket  = "private.sans-website.com"
 	var key     = "private/" + image.folderId + "/" + image.imageId ;
  
-	persist.create( table, image ).then( function( data ) {
+	persist.put( table, image ).then( function( data ) {
 		s3.getSignedUrl( request, {
 			Bucket: bucket,
 			Key: key,
@@ -60,7 +56,7 @@ exports.create = (event, context, callback) => {
 	}) ;
 }
 
-//Not used!!
+//Update an image record - does more or less the same as create. 
 exports.update = (event, context, callback) => {
 
 	if ( ( !event.headers.Authorization ) || ( !event.headers.Authorization.startsWith("Bearer ") ) ) {
@@ -74,26 +70,12 @@ exports.update = (event, context, callback) => {
 		return false ;
 	}
 	
-	const body = JSON.parse( event.body ) ;
+	const image = JSON.parse( event.body ) ;
 	const table = 'sans-images' ;
-	var image = {} ;
-	image.userId    = sub ; // check this is still the same?
-	image.imageId   = body.imageId
-	image.folderId  = body.folderId ;
-	image.name      = body.name ;
-	image.type      = body.type ;
-	image.size      = body.size ;
-	image.thumbnail = body.thumbnail ;
-	image.createdAt = body.createdAt ;
-
-	if ( !image.thumbnail )
-	{
-		image.thumbnail = image.imageId+'-300' ;
-//		resize.createThumbnail( image, { width: 300 } ) ;
-	}
+	image.userId    = sub ; // check this is the same first? what other fields do we want to enforce?
 	
-	persist.update( table, image ).then( function( data ) {
-		callback( null.response.success( image))
+	persist.put( table, image ).then( function( data ) {
+		callback( null, response.success( image))
 	}).catch ( function (error ) {
 		console.log( "error=" + error) ;
 		callback( null, response.failure({ status: false }) );
