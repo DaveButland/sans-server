@@ -3,6 +3,7 @@ const uuid     = require('uuid');
 const persist  = require('./persist');
 const validateJWT = require('./validateJWT');
 const response = require('./response');
+const cookies = require('./cookies');
 const config = require('./config') ;
 
 AWS.config.update({
@@ -188,6 +189,30 @@ exports.getAll = (event, context, callback) => {
 	persist.readIndex(table, index, expression, values ).then( function ( images ) { 
 		callback( null, response.success( images.Items )) ;
 	}). catch( function( error) {
+		console.log( "Failed to read images " + error ) ;
+		callback( null, response.failure( "Could not get images" ) ) ;
+	});
+} ;
+
+//get all public images. No JWT token required and temporary cookie returned with images
+exports.getpublic = (event, context, callback) => {
+	
+	let domain = event["queryStringParameters"]["domain"];
+
+	const sub = 'da508140-a652-4230-beea-c36f20cb6132' ; // hard coded user for now
+	const folderId = 'be4d4ba9-388c-4715-8634-cf5cf40d0f8c' ; // hard coded folder for now
+
+	const table = 'sans-images' ;
+	const index = 'userid-folderid-index' ;
+	const expression = "userId = :u and folderId = :f" ;
+	const values = {":u": sub, ":f": folderId } ;
+
+	persist.readIndex(table, index, expression, values ).then( function ( result ) { 
+		const images = result.Items ;
+		cookies.getImageCookies( images, domain, function( error, cookies ) { 
+			callback( null, response.success( { images: images, cookies: cookies } ) ) 
+		}) ; 
+	}).catch( function( error) {
 		console.log( "Failed to read images " + error ) ;
 		callback( null, response.failure( "Could not get images" ) ) ;
 	});
