@@ -200,7 +200,8 @@ exports.getpublic = (event, context, callback) => {
 	let domain = event["queryStringParameters"]["domain"];
 
 	const sub = 'da508140-a652-4230-beea-c36f20cb6132' ; // hard coded user for now
-	const folderId = 'be4d4ba9-388c-4715-8634-cf5cf40d0f8c' ; // hard coded folder for now
+//	const folderId = 'be4d4ba9-388c-4715-8634-cf5cf40d0f8c' ; // hard coded folder for now
+	const folderId = '80cd6156-4630-42df-8342-215b58eb4459' ;
 
 	const table = 'sans-images' ;
 	const index = 'userid-folderid-index' ;
