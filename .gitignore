@@ -1,6 +1,7 @@
 config.js
 *.pem
 *.zip
+.DS_Store
 
 # Logs
 logs

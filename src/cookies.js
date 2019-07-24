@@ -28,7 +28,7 @@ exports.getImageCookies = ( images, domain, callback ) => {
      
     let policy = {
         'Statement': [{
-            'Resource': 'https://'+domain+'/private/'+image[0].folderId+'/*',
+            'Resource': 'https://'+domain+'/private/'+images[0].folderId+'/*',
             'Condition': {
                 'DateLessThan': {'AWS:EpochTime': expiry}
             }
