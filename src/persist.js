@@ -23,6 +23,17 @@ exports.put = function (table, record) {
 	return dynamoDb.put(params).promise();
 }
 
+exports.get = function (table, key) {
+	const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+	const params = { 
+		TableName: table,
+		Key: key 
+	}
+
+	return dynamoDb.get(params).promise();
+}
+
 exports.read = function (table, expression, values ) {
 	const dynamoDb = new AWS.DynamoDB.DocumentClient();
 

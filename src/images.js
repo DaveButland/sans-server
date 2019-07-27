@@ -150,17 +150,16 @@ exports.get = (event, context, callback) => {
 		return false ;
 	}
 	
-//	const folderId = event.pathParameters.folderid ;
+	const quyen = '832bb986-871d-4bd2-a832-9e7134265604' ;
 	const imageId  = event.pathParameters.imageid ;
 	const table = 'sans-images' ;
-
-	const key = { userId: sub, imageId: imageId } ;
+	const key = { userId: quyen, imageId: imageId } ;
 	
-	persist.read( table, key ).then( function( data ) {
+	persist.get( table, key ).then( function( data ) {
 		callback( null, response.success( data.Item )) ;
 	}). catch( function( error) {
 		console.log( "Failed to read images " + error ) ;
-		callback( null, response.failure( "Could not get images" ) ) ;
+		callback( null, response.failure( "Could not get image" ) ) ;
 	});
 } ;
 
