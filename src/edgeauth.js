@@ -7,7 +7,7 @@ var USERPOOLID = config.USERPOOLID ;
 var JWKS = config.JWKS ;
 var region = config.region ;
 
-var iss = 'https://cognito-idp.' + region + '.amazonaws.com/' + USERPOOLID;
+var iss = 'https://cognito-idp.' + region + '.amazonaws.com/' + USERPOOLID; //this is a string representing your token issuer (this one is AWS specific)
 var pems;
 
 pems = {};
