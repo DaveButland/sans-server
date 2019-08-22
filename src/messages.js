@@ -20,9 +20,18 @@ exports.create = (event, context, callback) => {
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-messages' ;
 	var message = {} ;
-	messages.userId = sub ;
-	message.messageId  = uuid.v4() ;
-	message.subject = body.subject ;
+	message.userid    = sub ;
+	message.messageid = uuid.v4() ;
+	message.name      = body.name ;
+	message.subject   = body.subject ;
+	message.start     = body.start ;
+	message.end       = body.end ; //calculated
+	message.duration  = body.duration ;
+	message.type      = body.type ;
+	message.location  = body.location ;
+	message.portfolio = body.portfolio ;
+	message.email     = body.email ;
+	message.content   = body.content ;
 	message.createdAt = Date.now() ;
 	
 	persist.create( table, message ).then( function( data ) {
@@ -80,7 +89,7 @@ exports.delete = (event, context, callback) => {
 	}
 	
 	const table = 'sans-messages' ;
-	const key = { userId: sub, messageId: event.pathParameters.messageid } ;
+	const key = { userid: sub, messageid: event.pathParameters.messageid } ;
 
 	persist.delete( table, key ).then( function( data ) {
 		console.log( response.success( data ) ) ;
@@ -108,11 +117,19 @@ exports.update = ( event, context, callback) => {
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-messages' ;
 	var message = {} ;
-	message.userId    = body.userId ;
-	message.messageId = body.messageId;
+	message.userid    = sub ;
+	message.messageid = body.messageid ;
+	message.name      = body.name ;
 	message.subject   = body.subject ;
+	message.start     = body.start ;
+	message.end       = body.end ; //calculated
+	message.duration  = body.duration ;
+	message.type      = body.type ;
+	message.location  = body.location ;
+	message.portfolio = body.portfolio ;
+	message.email     = body.email ;
 	message.content   = body.content ;
-	message.createdAt = body.createdAt ;
+	message.createdAt = Date.now() ;
 	
 	persist.create( table, message ).then( function( data ) {
 		callback( null, response.success( message )) ;
@@ -131,7 +148,7 @@ exports.getAll = (event, context, callback) => {
 
 	const sub = validateJWT.getSub( event.headers.Authorization.slice(7) ) ;
 	const table = 'sans-messages' ;
-	const expression = "userId = :u" ;
+	const expression = "userid = :u" ;
 	const values = { ":u": sub } ;
 
 	console.log( table, expression, values ) ;

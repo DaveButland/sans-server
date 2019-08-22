@@ -20,12 +20,15 @@ exports.create = (event, context, callback) => {
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-events' ;
 	var sans_event = {} ;
-	sans_event.userId = sub ;
-	sans_event.pageId  = uuid.v4() ;
-	sans_event.name = body.name ;
+	sans_event.userid    = sub ;
+	sans_event.eventid   = uuid.v4() ;
+	sans_event.title     = body.title ;
+	sans_event.type      = body.type ;
+	sans_event.start     = body.start ;
+	sans_event.end       = body.end ;
 	sans_event.createdAt = Date.now() ;
 	
-	persist.create( table, sans_event ).then( function( data ) {
+	persist.put( table, sans_event ).then( function( data ) {
 		callback( null, response.success( sans_event )) ;
 	}).catch ( function (error ) {
 		console.log( "error=" + error) ;
@@ -80,7 +83,7 @@ exports.delete = (event, context, callback) => {
 	}
 	
 	const table = 'sans-events' ;
-	const key = { userId: sub, eventId: event.pathParameters.eventid } ;
+	const key = { userid: sub, eventid: event.pathParameters.eventid } ;
 
 	persist.delete( table, key ).then( function( data ) {
 		console.log( response.success( data ) ) ;
@@ -108,13 +111,15 @@ exports.update = ( event, context, callback) => {
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-events' ;
 	var sans_event = {} ;
-	sans_event.userId    = body.userId ;
-	sans_event.eventId   = body.eventId ;
-	sans_event.start     = body.start ;
+	sans_event.userid    = sub ;
+	sans_event.eventid   = body.eventid ;
 	sans_event.title     = body.title ;
+	sans_event.type      = body.type ;
+	sans_event.start     = body.start ;
+	sans_event.end       = body.end ;
 	sans_event.createdAt = body.createdAt ;
 	
-	persist.create( table, sans_event ).then( function( data ) {
+	persist.put( table, sans_event ).then( function( data ) {
 		callback( null, response.success( page )) ;
 	}).catch ( function (error ) {
 		console.log( "error=" + error) ;
@@ -122,17 +127,18 @@ exports.update = ( event, context, callback) => {
 	}) ;
 }
 
-//get all pages
+//get all events
 exports.getAll = (event, context, callback) => {
 	
-	if ( ( !event.headers.Authorization ) || ( !event.headers.Authorization.startsWith("Bearer ") ) ) {
-		return response.invalid( "Missing or Invalid Authorization Token");
-	}
+//	if ( ( !event.headers.Authorization ) || ( !event.headers.Authorization.startsWith("Bearer ") ) ) {
+//		return response.invalid( "Missing or Invalid Authorization Token");
+//	}
 
-	const sub = validateJWT.getSub( event.headers.Authorization.slice(7) ) ;
+//	const sub = validateJWT.getSub( event.headers.Authorization.slice(7) ) ;
+	const quyen = '832bb986-871d-4bd2-a832-9e7134265604' ; // hard coded for now
 	const table = 'sans-events' ;
-	const expression = "userId = :u" ;
-	const values = { ":u": sub } ;
+	const expression = "userid = :u" ;
+	const values = { ":u": quyen } ;
 
 	console.log( table, expression, values ) ;
 
