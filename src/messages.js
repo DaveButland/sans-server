@@ -15,15 +15,16 @@ exports.create = (event, context, callback) => {
 	message.messageid = uuid.v4() ;
 	message.name      = body.name ;
 	message.email     = body.email ;
-	message.portfolio = body.portfolio ;
-	message.date      = body.date ;
-	message.time      = body.time ;
-	message.duration  = body.duration ;
-	message.type      = body.type ;
-	message.location  = body.location ;
 	message.subject   = body.subject ;
-	message.content   = body.content ;
+	message.test      = body.text ;
 	message.createdAt = Date.now() ;
+
+	//  message.portfolio = body.portfolio ;
+//  message.time      = body.time ;
+//  message.duration  = body.duration ;
+//	message.type      = body.type ;
+//	message.location  = body.location ;
+//	message.content   = body.content ;
 	
 	persist.create( table, message ).then( function( data ) {
 		callback( null, response.success( message )) ;

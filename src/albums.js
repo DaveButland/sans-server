@@ -19,11 +19,15 @@ exports.create = (event, context, callback) => {
 	
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-albums' ;
-	var sans_album  = {} ;
-	sans_album.userId    = sub ;
-	sans_album.albumId   = uuid.v4() ;
-	sans_album.name      = body.name ;
-	sans_album.createdAt = Date.now() ;
+	var sans_album         = {} ;
+	sans_album.userid      = sub ;
+	sans_album.albumid     = uuid.v4() ;
+	sans_album.title       = body.title ;
+	sans_album.description = body.description ;
+	sans_album.cover       = body.cover ;
+	sans_album.images      = body.images ;
+	sans_album.private     = body.private ;
+	sans_album.createdAt   = Date.now() ;
 	
 	persist.create( table, sans_album ).then( function( data ) {
 		callback( null, response.success( sans_album )) ;
@@ -80,7 +84,7 @@ exports.delete = (event, context, callback) => {
 	}
 	
 	const table = 'sans-albums' ;
-	const key = { userId: sub, albumId: event.pathParameters.albumid } ;
+	const key = { userid: sub, album: event.pathParameters.albumid } ;
 
 	persist.delete( table, key ).then( function( data ) {
 		console.log( response.success( data ) ) ;
@@ -108,10 +112,14 @@ exports.update = ( event, context, callback) => {
 	const body = JSON.parse( event.body ) ;
 	const table = 'sans-albums' ;
 	var sans_album = {} ;
-	sans_album.userId    = body.userId ;
-	sans_album.albumId   = body.albumId;
-	sans_album.name      = body.name ;
-	sans_album.createdAt = body.createdAt ;
+	sans_album.userid      = body.userid ;
+	sans_album.albumid     = body.albumid ;
+	sans_album.title       = body.title ;
+	sans_album.description = body.description ;
+	sans_album.cover       = body.cover ;
+	sans_album.images      = body.images ;
+	sans_album.private     = body.private ;
+	sans_album.createdAt   = body.createdAt ;
 	
 	persist.create( table, sans_album ).then( function( data ) {
 		callback( null, response.success( sans_album )) ;
@@ -124,14 +132,10 @@ exports.update = ( event, context, callback) => {
 //get all albums
 exports.getAll = (event, context, callback) => {
 	
-	if ( ( !event.headers.Authorization ) || ( !event.headers.Authorization.startsWith("Bearer ") ) ) {
-		return response.invalid( "Missing or Invalid Authorization Token");
-	}
-
-	const sub = validateJWT.getSub( event.headers.Authorization.slice(7) ) ;
-	const table = 'sans-albums' ;
-	const expression = "userId = :u" ;
-	const values = { ":u": sub } ;
+	const quyen      = '832bb986-871d-4bd2-a832-9e7134265604' ; // hard coded for now
+	const table      = 'sans-albums' ;
+	const expression = "userid = :u" ;
+	const values     = { ":u": quyen } ;
 
 	console.log( table, expression, values ) ;
 

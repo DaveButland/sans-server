@@ -79,7 +79,7 @@ exports.get = (event, context, callback) => {
 
     let policy = {
         'Statement': [{
-					'Resource': 'https://'+domain+'/private/b79d8427-8919-4e66-8af7-c0597702a812/*',
+					'Resource': 'https://'+domain+'/private/80cd6156-4630-42df-8342-215b58eb4459/*',
 					'Condition': {
                 'DateLessThan': {'AWS:EpochTime': expiry}
             }

@@ -137,19 +137,7 @@ exports.delete = (event, context, callback) => {
 }
 
 //get all the images in a folder. Header must contain a JWT token to identify user
-exports.get = (event, context, callback) => {
-	
-	if ( ( !event.headers.Authorization ) || ( !event.headers.Authorization.startsWith("Bearer ") ) ) {
-		return response.invalid( "Missing or Invalid Authorization Token");
-	}
-
-	const sub = validateJWT.getSub( event.headers.Authorization.slice(7) ) ;
-
-	if ( !sub ) {
-		callback( null, response.failure( { errorMessages: "Invalid Token"} ) ) ;
-		return false ;
-	}
-	
+exports.get = (event, context, callback) => {	
 	const quyen = '832bb986-871d-4bd2-a832-9e7134265604' ;
 	const imageId  = event.pathParameters.imageid ;
 	const table = 'sans-images' ;
