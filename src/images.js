@@ -38,7 +38,8 @@ exports.create = (event, context, callback) => {
 	var bucket  = "private.sans-website.com"
 	var key     = "private/" + image.folderId + "/" + image.imageId ;
  
-	persist.put( table, image ).then( function( data ) {
+	// remove the put here. Just generate a new uuid and signed url. Once the image is uploaded the client will then call update to add the image
+//	persist.put( table, image ).then( function( data ) {
 		s3.getSignedUrl( request, {
 			Bucket: bucket,
 			Key: key,
@@ -46,15 +47,16 @@ exports.create = (event, context, callback) => {
 		}, function(error, data) {
 			if(error) {
 				context.done(error);
+				callback( null, response.failure( { status: error } ) ) ;
 			}else{
 				console.log( data ) ;
 				callback( null, response.success( { image: image, signedURL: data } ) ) ;
 			}
 		})
-	}).catch ( function (error ) {
-		console.log( "error=" + error) ;
-		callback( null, response.failure({ status: false }) );
-	}) ;
+//	}).catch ( function (error ) {
+//		console.log( "error=" + error) ;
+//		callback( null, response.failure({ status: false }) );
+//	}) ;
 }
 
 //Update an image record - does more or less the same as create. 

@@ -146,3 +146,97 @@ exports.getAll = (event, context, callback) => {
 		callback( null, response.failure( "Could not get albums" ) ) ;
 	});
 } ;
+
+/*
+exports.getImage = async ( userId, imageId ) => {
+	const sans_images = 'sans-images' ;
+	const image_key = { userId: userId, imageId: imageId } ;
+
+	const image = await persist.get( sans_images, image_key ) ;
+
+	return image.Item ;
+}
+
+exports.getImages = ( userId, albumId ) => {
+	const quyen    = '832bb986-871d-4bd2-a832-9e7134265604' ;
+	//const albumId  = event.pathParameters.albumid ;
+	const sans_albums = 'sans-albums' ;
+	const album_key = { userid: quyen, albumid: albumId } ;
+
+	return persist.get( sans_albums, album_key ) ;
+//	const images = Promise.all(
+//		album.Item.images.map( async ( data ) => {
+//			return this.getImage( userId, data.image ) ;
+//		} )  
+//	) ;
+
+//	return images ;
+
+//	}) ;
+} 
+
+exports.getImagesAPI = async ( event, context, callback ) => {
+	const quyen    = '832bb986-871d-4bd2-a832-9e7134265604' ;
+	const userid   = quyen ; // event.pathParameters.userid ;
+	const albumid  = event.pathParameters.albumid ;
+	const sans_albums = 'sans-albums' ;
+
+	this.getImages( quyen, event.pathParameters.albumid ).then( function( images ) { 
+		callback( null, response.success( images )) ;
+	}). catch( function( error) {
+		console.log( "Failed to read album images " + error ) ;
+		callback( null, response.failure( "Could not get album images" ) ) ;
+	});
+}
+*/
+
+exports.getImage = async ( userid, imageid ) => {
+	const table = 'sans-images' ;
+	const key = { userId: userid, imageId: imageid } ;
+
+	try {
+		const image = ( await persist.get( table, key) ).Item ;
+		return image ;
+	} catch ( error ) {
+		console.log( error ) ;
+		return error ;
+	}
+}
+
+exports.getImages = async ( userid, albumid ) => {
+	const table = 'sans-albums' ;
+	const key = { userid: userid, albumid: albumid } ;
+
+	try {
+		const album = await persist.get( table, key ) ;
+
+		const images = Promise.all(
+			album.Item.images.map( async ( data ) => {
+				return this.getImage( userid, data.image ) ;
+			} )  
+		) ;
+		
+		return await images ;
+	} catch ( error ) {
+		console.log( error ) ;
+		return error ;
+	}
+}
+
+exports.getImagesHandler = async (event) => {
+  console.log('Received event:', JSON.stringify(event, null, 2));
+
+	const quyen    = '832bb986-871d-4bd2-a832-9e7134265604' ;
+	const userid   = quyen ; // event.pathParameters.userid ;
+	const albumid  = event.pathParameters.albumid ;
+	
+	try {
+		const sans_images = await this.getImages( userid, albumid ) ;
+		console.log( sans_images ) ;
+		return response.success( sans_images ) ;
+	} catch ( error ) {
+		console.log( error ) ;
+		return response.failure( error ) ;
+	}
+};
+

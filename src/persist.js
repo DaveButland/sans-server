@@ -31,7 +31,41 @@ exports.get = function (table, key) {
 		Key: key 
 	}
 
-	return dynamoDb.get(params).promise();
+	const test = dynamoDb.get(params).promise() ;
+
+	return test ;
+}
+
+exports.get1 = function (table, key) {
+	const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+	const params = { 
+		TableName: table,
+		Key: key 
+	}
+
+	return dynamoDb.get(params, function( err, data ) {
+		if (err) {
+			console.log( "help" ) ;
+		}
+		else {
+			console.log( data.Item ) ;
+		}
+	});
+
+	docClient.query(params, function(err, data) {
+    if (err) {
+        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+        console.log("Query succeeded.");
+        data.Items.forEach(function(item) {
+            console.log(" -", item.year + ": " + item.title
+            + " ... " + item.info.genres
+            + " ... " + item.info.actors[0]);
+        });
+    }
+});
+
 }
 
 exports.read = function (table, expression, values ) {
